@@ -36,10 +36,6 @@ class UserController extends Controller
 
              // Get the authenticated user
         $user = Auth::user();
-
-         $client = DB::table('oauth_clients')->where('id','0197b637-4956-73d1-9cb4-9cd9036cbf27')->firstOrFail();
-
-        // dd($client);
      
 
         $http = new Client();
@@ -49,8 +45,8 @@ class UserController extends Controller
 
                 'form_params' => [
                     'grant_type' => 'password',
-                    'client_id' => $client->id,
-                    'client_secret' => $client->secret,
+                    'client_id' => env('PASSWORD_CLIENT_ID'),
+                    'client_secret' => env('PASSWORD_CLIENT_SECRET'),
                     'username' => $request->email,
                     'password' => $request->password,
                     'scope' => '',
@@ -59,7 +55,16 @@ class UserController extends Controller
             
               $tokenData = json_decode((string) $response->getBody(), true);
 
-              return response()->json($tokenData);
+            //   return response()->json($tokenData);
+
+                return response()->json([
+                    'user' => $user,
+                    
+                    'access_token' => $tokenData['access_token'],
+                    'refresh_token' => $tokenData['refresh_token'],
+                    'token_type' => $tokenData['token_type'],
+                    'expires_in' => $tokenData['expires_in'],
+                ]);
             
     }catch(ValidationException $e){
             return response()->json([
