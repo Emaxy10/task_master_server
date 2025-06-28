@@ -25,8 +25,8 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Passport::$keyPath = storage_path(); // Initialize it early
         Passport::enablePasswordGrant();
-        Passport::enablePasswordGrant();
         Passport::tokensExpireIn(now()->addHour());
         Passport::refreshTokensExpireIn(now()->addHours(2));
+        
     }
 }
