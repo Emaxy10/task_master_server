@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Queue\RedisQueue;
 
 class TaskController extends Controller
 {
@@ -13,6 +15,11 @@ class TaskController extends Controller
     public function index()
     {
         //
+        $tasks = Task::all();
+
+        return response()->json([
+            "task" => $tasks,
+        ]);
     }
 
     /**
@@ -21,14 +28,21 @@ class TaskController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
         //
+        $task = Task::create($request->all());
+
+        return response()->json([
+            "task" => $task,
+            "status" =>"success",
+        ]);
     }
 
     /**
