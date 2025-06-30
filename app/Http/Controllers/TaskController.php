@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Queue\RedisQueue;
@@ -64,9 +65,17 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
+    public function update(UpdateTaskRequest $request, Task $task)
     {
         //
+        // $task->update($request->all());
+
+        $task->update($request->validated());
+
+        return response()->json([
+            'message' => 'Task updated successfully.',
+            'task' => $task
+        ]);
     }
 
     /**
@@ -75,5 +84,6 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         //
+        return $task->delete();
     }
 }

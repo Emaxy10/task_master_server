@@ -23,7 +23,7 @@ class StoreTaskRequest extends FormRequest
     {
         return [
             //
-                'title'=> 'required|string|max:255',
+                'title' => 'required|string|max:255|unique:tasks,title',
                 'description'=> 'nullable|string',
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
