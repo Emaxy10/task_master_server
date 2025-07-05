@@ -24,4 +24,8 @@ class Task extends Model
         "weekly_day",
         
     ] ;
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }
