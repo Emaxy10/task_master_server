@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 
-Route::post('/tasks', [TaskController::class,'store']);
+Route::post('/tasks', [TaskController::class,'store'])->middleware('auth:api');
 Route::get('/tasks', [TaskController::class,'index']);
 Route::put('/tasks/{task}', [TaskController::class,'update']);
 Route::delete('/tasks/{task}', [TaskController::class,'destroy']);

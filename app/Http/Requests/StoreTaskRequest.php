@@ -33,7 +33,9 @@ class StoreTaskRequest extends FormRequest
                 'completed_at' => 'nullable|date',
                 'is_recurring' => 'boolean',
                 'recurrence_rule' => 'nullable|string|max:255', // You can customize this with stricter rules if needed
-                'user_id'=> 'required|exists:users,id',
+                'custom_date'=> 'nullable|date',
+                'custom_time'=> 'nullable',
+                'weekly_day' => 'nullable|string'
                 
         ];
     }

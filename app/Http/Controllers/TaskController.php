@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Queue\RedisQueue;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -38,7 +39,10 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         //
-        $task = Task::create($request->all());
+        $data = $request->validated();
+        $data['user_id'] = Auth::id(); // or auth()->id()
+
+        $task = Task::create($data);
 
         return response()->json([
             "task" => $task,

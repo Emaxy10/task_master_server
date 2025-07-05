@@ -19,6 +19,9 @@ class Task extends Model
         "is_recurring",
         "recurrence_rule",
         "user_id",
+        "custom_date",
+        "custom_time",
+        "weekly_day",
         
     ] ;
 }
