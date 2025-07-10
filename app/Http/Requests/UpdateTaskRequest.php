@@ -32,7 +32,6 @@ class UpdateTaskRequest extends FormRequest
             'completed_at' => 'nullable|date',
             'is_recurring' => 'boolean',
             'recurrence_rule' => 'nullable|string|max:255',
-            'user_id' => 'sometimes|required|exists:users,id',
         ];
     }
 }

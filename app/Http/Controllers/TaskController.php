@@ -67,6 +67,10 @@ class TaskController extends Controller
         //
          $user = Auth::user(); // Get full user model
          $tasks = $user->tasks; // Eager load related tasks
+
+         return response()->json([
+            "tasks"=> $tasks,
+         ]);
     }
 
     /**
