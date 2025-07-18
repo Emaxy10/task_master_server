@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Mail\TaskReminderMail;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Queue\RedisQueue;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class TaskController extends Controller
 {
@@ -98,4 +100,17 @@ class TaskController extends Controller
         //
         return $task->delete();
     }
+
+    // public function reminder(){
+    //     $tasks = Task::whereDate('due_date', today())->
+    //               orWhere('status', 'pending')
+    //               ->with('user')->get();
+    //    // dd($tasks);
+    //     foreach( $tasks as $task ){
+    //         $user = $task->user;
+    //         if($user){
+    //              Mail::to($user->email)->send(new TaskReminderMail($task));
+    //         }
+    //     }
+    // }
 }
