@@ -101,16 +101,16 @@ class TaskController extends Controller
         return $task->delete();
     }
 
-    // public function reminder(){
-    //     $tasks = Task::whereDate('due_date', today())->
-    //               orWhere('status', 'pending')
-    //               ->with('user')->get();
-    //    // dd($tasks);
-    //     foreach( $tasks as $task ){
-    //         $user = $task->user;
-    //         if($user){
-    //              Mail::to($user->email)->send(new TaskReminderMail($task));
-    //         }
-    //     }
-    // }
+    public function reminder(){
+        $tasks = Task::whereDate('due_date', today())->
+                  orWhere('status', 'pending')
+                  ->with('user')->get();
+       // dd($tasks);
+        foreach( $tasks as $task ){
+            $user = $task->user;
+            if($user){
+                 Mail::to($user->email)->send(new TaskReminderMail($task));
+            }
+        }
+    }
 }
