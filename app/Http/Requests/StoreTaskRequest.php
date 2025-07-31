@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class StoreTaskRequest extends FormRequest
 {
@@ -20,10 +22,20 @@ class StoreTaskRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
+        
     {
+        
+        
         return [
             //
-                'title' => 'required|string|max:255|unique:tasks,title',
+                'title' => [
+                'required',
+                'string',
+                'max:255',
+                    Rule::unique('tasks')->where(function ($query) {
+                        return $query->where('user_id', Auth::id());
+                 }),
+                ],
                 'description'=> 'nullable|string',
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
