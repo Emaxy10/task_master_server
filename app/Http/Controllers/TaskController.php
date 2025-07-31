@@ -76,6 +76,12 @@ class TaskController extends Controller
          ]);
     }
 
+    public function completedTask(Task $task){
+        //update pending task to completed
+         $task->status = "completed";
+         return $task->save();
+    }
+
     /**
      * Update the specified resource in storage.
      */
