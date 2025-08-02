@@ -82,6 +82,12 @@ class TaskController extends Controller
          return $task->save();
     }
 
+    public function undoTask(Task $task){
+        //update pending task to completed
+         $task->status = "pending";
+         return $task->save();
+    }
+
     /**
      * Update the specified resource in storage.
      */

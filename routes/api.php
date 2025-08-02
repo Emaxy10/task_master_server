@@ -18,6 +18,7 @@ Route::delete('/tasks/{task}', [TaskController::class,'destroy']);
 Route::get('/user/tasks', [TaskController::class,'user_tasks'])->middleware('auth:api');
 Route::get('/tasks/{task}', [TaskController::class,'show']);
 
-Route::patch('/tasks/{task}/status', [TaskController::class, 'completedTask']);
+Route::patch('/tasks/{task}/status', [TaskController::class, 'completedTask'])->middleware('auth:api');
+Route::patch('/tasks/{task}/status/undo', [TaskController::class, 'undoTask'])->middleware('auth:api');
 
 Route::get('/reminder', [TaskController::class,'reminder']);
