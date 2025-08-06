@@ -128,11 +128,26 @@ class TaskController extends Controller
     }
 
     public function search($search){
-        $tasks = Task::where('title', 'like', "%$search%")
-                    ->orWhere('description', 'like', "%$search%")
-                    ->get();
 
-                    return response()->json(
+        $auth_user = Auth::user();
+        // $tasks = Task::where('title', 'like', "%$search%")
+        //             ->orWhere('description', 'like', "%$search%")
+        //             ->get();
+
+        //             return response()->json(
+        //                  $tasks
+        //             );
+
+
+/** @var \App\Models\User $auth_user */
+        $tasks = $auth_user->tasks()
+            ->where(function ($query) use ($search) {
+                $query->where('title', 'like', "%$search%")
+                    ->orWhere('description', 'like', "%$search%");
+            })
+            ->get();
+
+             return response()->json(
                          $tasks
                     );
     }
