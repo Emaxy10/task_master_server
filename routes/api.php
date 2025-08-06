@@ -17,6 +17,9 @@ Route::put('/tasks/{task}', [TaskController::class,'update'])->middleware('auth:
 Route::delete('/tasks/{task}', [TaskController::class,'destroy']);
 Route::get('/user/tasks', [TaskController::class,'user_tasks'])->middleware('auth:api');
 Route::get('/tasks/{task}', [TaskController::class,'show']);
+Route::get('/tasks/search/{search}', [TaskController::class, 'search']);
+//Create middleware to ensure user seeing only his tasks when he search
+
 
 Route::patch('/tasks/{task}/status', [TaskController::class, 'completedTask'])->middleware('auth:api');
 Route::patch('/tasks/{task}/status/undo', [TaskController::class, 'undoTask'])->middleware('auth:api');

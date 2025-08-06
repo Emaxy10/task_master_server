@@ -113,6 +113,7 @@ class TaskController extends Controller
         return $task->delete();
     }
 
+
     public function reminder(){
         $tasks = Task::whereDate('due_date', today())->
                   orWhere('status', 'pending')
@@ -124,5 +125,15 @@ class TaskController extends Controller
                  Mail::to($user->email)->send(new TaskReminderMail($task));
             }
         }
+    }
+
+    public function search($search){
+        $tasks = Task::where('title', 'like', "%$search%")
+                    ->orWhere('description', 'like', "%$search%")
+                    ->get();
+
+                    return response()->json(
+                         $tasks
+                    );
     }
 }
