@@ -41,6 +41,7 @@ class StoreTaskRequest extends FormRequest
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'due_date' => 'nullable|date|after_or_equal:start_date',
                 'status'=> 'required|in:pending,in_progress,completed,overdue',
+                'priority'=> 'required|in:low,medium,high',
                 'is_completed' => 'boolean',
                 'completed_at' => 'nullable|date',
                 'is_recurring' => 'boolean',

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('end_date')->nullable();
             $table->date('due_date')->nullable();
             $table->enum('status', ['pending', 'in_progress', 'completed', 'overdue'])->default('pending');
+            // $table->enum('status', ['low', 'medium', 'high'])->default('low');
             $table->boolean('is_completed')->default(false);
             $table->timestamp('completed_at')->nullable();
             $table->boolean('is_recurring')->default(false);
