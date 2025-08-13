@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Str;
 
+// Route::get('test', function (){
+//     // return new \App\Mail\OverdueReminder();
+
+//     \Illuminate\Support\Facades\Mail::to('ray@mail.com')->send(
+//         new \App\Mail\OverdueReminder()
+//     );
+
+//     return "Mail was sent";
+// });
+
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 

@@ -42,7 +42,7 @@ class SendTaskReminders extends Command
 
         foreach ($tasks as $task) {
             try{
-                 Mail::to($task->user->email)->send(new TaskReminderMail($task));
+                 Mail::to($task->user)->send(new TaskReminderMail($task));
             }catch(\Exception $e){
                 $this->error($e->getMessage());
             }

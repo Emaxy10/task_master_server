@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Mail\TaskReminderMail;
+use App\Mail\OverdueReminder;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -45,7 +46,18 @@ class TaskController extends Controller
         $data = $request->validated();
         $data['user_id'] = Auth::id(); // or auth()->id()
 
+        $user = auth::user();
+
         $task = Task::create($data);
+
+        //Send mail
+        // Mail::to($user)->send(
+        // new OverdueReminder($task)
+        // );
+
+         Mail::to($user)->queue(
+        new OverdueReminder($task)
+        );
 
         return response()->json([
             "task" => $task,
