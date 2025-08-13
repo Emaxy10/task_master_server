@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Queue\RedisQueue;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
@@ -91,6 +92,7 @@ class TaskController extends Controller
     public function completedTask(Task $task){
         //update pending task to completed
          $task->status = "completed";
+         $task->is_completed = true;
          return $task->save();
     }
 
@@ -163,4 +165,38 @@ class TaskController extends Controller
                          $tasks
                     );
     }
+
+
+    public function get_completed_task(){
+         $auth_user = Auth::user();
+
+         /** @var \App\Models\User $auth_user */
+            $tasks = $auth_user->tasks()
+            ->where('is_completed', true)
+            ->where('status', 'completed')
+            ->get();
+
+            return response()->json(
+                $tasks
+            );
+
+    }
+
+    public function overdue(){
+         $auth_user = Auth::user();
+
+         /** @var \App\Models\User $auth_user */
+            $tasks = $auth_user->tasks()
+             ->where('is_completed', false)
+            ->whereDate('end_date', '<', Carbon::today()) // end_date after today
+            ->orderBy('end_date', 'asc') // soonest first
+            ->get();
+
+            return response()->json(
+                $tasks
+            );
+    }
+
+
+
 }

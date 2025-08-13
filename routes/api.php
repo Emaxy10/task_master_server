@@ -22,6 +22,11 @@ Route::post('/login', [UserController::class, 'login']);
 
 Route::post('/tasks', [TaskController::class,'store'])->middleware('auth:api');
 Route::get('/tasks', [TaskController::class,'index']);
+
+Route::get('/tasks/completed', [TaskController::class, 'get_completed_task'])->middleware('auth:api');
+
+Route::get('/tasks/overdue', [TaskController::class, 'overdue'])->middleware('auth:api');
+
 Route::get('/tasks/{task}', [TaskController::class, 'show'])->middleware('auth:api');
 Route::put('/tasks/{task}', [TaskController::class,'update'])->middleware('auth:api');
 Route::delete('/tasks/{task}', [TaskController::class,'destroy']);
@@ -33,5 +38,9 @@ Route::get('/tasks/search/{search}', [TaskController::class, 'search'])->middlew
 
 Route::patch('/tasks/{task}/status', [TaskController::class, 'completedTask'])->middleware('auth:api');
 Route::patch('/tasks/{task}/status/undo', [TaskController::class, 'undoTask'])->middleware('auth:api');
+
+
+
+Route::get('/tasks/overdue', [TaskController::class, 'overdue'])->middleware('auth:api');
 
 Route::get('/reminder', [TaskController::class,'reminder']);
