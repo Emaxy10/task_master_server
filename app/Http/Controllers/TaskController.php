@@ -197,6 +197,21 @@ class TaskController extends Controller
             );
     }
 
+       public function ongoing(){
+         $auth_user = Auth::user();
+
+         /** @var \App\Models\User $auth_user */
+            $tasks = $auth_user->tasks()
+             ->where('is_completed', false)
+             ->where('status', 'pending')
+            ->whereDate('end_date', '>', Carbon::today()) 
+            ->get();
+
+            return response()->json(
+                $tasks
+            );
+    }
+
 
 
 }
