@@ -196,15 +196,20 @@ class TaskController extends Controller
          $auth_user = Auth::user();
 
          /** @var \App\Models\User $auth_user */
+          
             $tasks = $auth_user->tasks()
-             ->where('is_completed', false)
-             ->where('status', 'pending')
-            ->whereDate('end_date', '>', Carbon::today()) 
-            ->get();
+                ->where(function ($query) {
+                    $query->where('is_completed', false)
+                        ->orWhere('status', 'pending');
+                })
+                ->where(function ($query) {
+                    $query->whereDate('end_date', '>', Carbon::today())
+                        ->orWhereNull('end_date');
+                })
+                ->get();
 
-            return response()->json(
-                $tasks
-            );
+            return response()->json($tasks);
+
     }
 
 
