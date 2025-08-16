@@ -99,6 +99,7 @@ class TaskController extends Controller
     public function undoTask(Task $task){
         //update pending task to completed
          $task->status = "pending";
+         $task->is_completed = false;
          return $task->save();
     }
 
@@ -144,13 +145,7 @@ class TaskController extends Controller
     public function search($search){
 
         $auth_user = Auth::user();
-        // $tasks = Task::where('title', 'like', "%$search%")
-        //             ->orWhere('description', 'like', "%$search%")
-        //             ->get();
 
-        //             return response()->json(
-        //                  $tasks
-        //             );
 
 
 /** @var \App\Models\User $auth_user */
