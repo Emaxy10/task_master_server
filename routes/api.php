@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SubTaskController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route as RoutingRoute;
@@ -44,6 +45,18 @@ Route::patch('/tasks/{task}/complete', [TaskController::class, 'completedTask'])
 Route::patch('/tasks/{task}/status/undo', [TaskController::class, 'undoTask'])->middleware('auth:api');
 
 
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('tasks.subtasks', SubTaskController::class);
+});
 
+// This automatically gives you RESTful nested routes like:
 
-Route::get('/reminder', [TaskController::class,'reminder']);
+// GET /tasks/{task}/subtasks → list subtasks of a task
+
+// POST /tasks/{task}/subtasks → create subtask
+
+// GET /tasks/{task}/subtasks/{subtask} → show subtask
+
+// PUT /tasks/{task}/subtasks/{subtask} → update subtask
+
+// DELETE /tasks/{task}/subtasks/{subtask} → delete subtask
