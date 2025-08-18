@@ -19,18 +19,42 @@ class SubTaskController extends Controller
     /**
      * Store a newly created subtask.
      */
+    // public function store(Request $request, Task $task)
+    // {
+    //     $validated = $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'description' => 'nullable|string',
+    //         'end_date' => 'nullable|date',
+    //     ]);
+
+    //     $subTask = $task->subTasks()->create($validated);
+
+    //     return response()->json($subTask, 201);
+    // }
+
+    // Store subtask
     public function store(Request $request, Task $task)
     {
+        // Validate array of subtasks
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'end_date' => 'nullable|date',
+            'subtasks' => 'required|array',
+            'subtasks.*.title' => 'required|string|max:255',
+            'subtasks.*.description' => 'nullable|string',
+            'subtasks.*.end_date' => 'nullable|date',
         ]);
 
-        $subTask = $task->subTasks()->create($validated);
+        $createdSubtasks = [];
 
-        return response()->json($subTask, 201);
+        foreach ($validated['subtasks'] as $subtaskData) {
+            $createdSubtasks[] = $task->subTasks()->create($subtaskData);
+        }
+
+        return response()->json([
+            'message' => 'Subtasks created successfully',
+            'subtasks' => $createdSubtasks
+        ], 201);
     }
+
 
     /**
      * Display a single subtask.
