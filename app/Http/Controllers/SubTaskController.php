@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SubTask;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SubTaskController extends Controller
 {
@@ -38,10 +39,27 @@ class SubTaskController extends Controller
         // Validate array of subtasks
         $validated = $request->validate([
             'subtasks' => 'required|array',
-            'subtasks.*.title' => 'required|string|max:255',
+            'subtasks.*.title' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('sub_tasks', 'title')->where(column: function ($query) use ($task) {
+                    return $query->where('task_id', $task->id);
+                }),
+            ],
             'subtasks.*.description' => 'nullable|string',
-            'subtasks.*.end_date' => 'nullable|date',
+            'subtasks.*.end_date' => [
+                'nullable',
+                'date',
+                'after_or_equal:today', // ✅ cannot be in the past
+                function ($attribute, $value, $fail) use ($task) {
+                    if ($task->end_date && $value > $task->end_date) {
+                        $fail("The {$attribute} cannot be later than the parent task's end date ({$task->end_date}).");
+                    }
+                },
+            ],
         ]);
+        
 
         $createdSubtasks = [];
 
