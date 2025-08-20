@@ -17,21 +17,7 @@ class SubTaskController extends Controller
         return response()->json($task->subTasks);
     }
 
-    /**
-     * Store a newly created subtask.
-     */
-    // public function store(Request $request, Task $task)
-    // {
-    //     $validated = $request->validate([
-    //         'title' => 'required|string|max:255',
-    //         'description' => 'nullable|string',
-    //         'end_date' => 'nullable|date',
-    //     ]);
-
-    //     $subTask = $task->subTasks()->create($validated);
-
-    //     return response()->json($subTask, 201);
-    // }
+  
 
     // Store subtask
     public function store(Request $request, Task $task)
@@ -77,13 +63,10 @@ class SubTaskController extends Controller
     /**
      * Display a single subtask.
      */
-    public function show(Task $task, SubTask $subTask)
+    public function show( SubTask $subtask)
     {
-        if ($subTask->task_id !== $task->id) {
-            return response()->json(['error' => 'SubTask does not belong to this task'], 403);
-        }
-
-        return response()->json($subTask);
+        
+        return response()->json($subtask);
     }
 
     /**
@@ -110,14 +93,8 @@ class SubTaskController extends Controller
     /**
      * Remove a subtask.
      */
-    public function destroy(Task $task, SubTask $subTask)
+    public function destroy(SubTask $subTask)
     {
-        if ($subTask->task_id !== $task->id) {
-            return response()->json(['error' => 'SubTask does not belong to this task'], 403);
-        }
-
         $subTask->delete();
-
-        return response()->json(null, 204);
     }
 }

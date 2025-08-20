@@ -45,13 +45,14 @@ Route::patch('/tasks/{task}/complete', [TaskController::class, 'completedTask'])
 Route::patch('/tasks/{task}/status/undo', [TaskController::class, 'undoTask'])->middleware('auth:api');
 
 
-Route::middleware('auth:api')->group(function () {
-    Route::apiResource('tasks.subtasks', SubTaskController::class);
-});
+// Route::middleware('auth:api')->group(function () {
+//     Route::apiResource('tasks.subtasks', SubTaskController::class);
+// });
+
 
 // This automatically gives you RESTful nested routes like:
 
-// GET /tasks/{task}/subtasks → list subtasks of a task
+// GET /tasks/{task}/subtasks → index subtasks of a task
 
 // POST /tasks/{task}/subtasks → create subtask
 
@@ -60,3 +61,22 @@ Route::middleware('auth:api')->group(function () {
 // PUT /tasks/{task}/subtasks/{subtask} → update subtask
 
 // DELETE /tasks/{task}/subtasks/{subtask} → delete subtask
+
+
+Route::middleware('auth:api')->group(function () {
+    // GET /tasks/{task}/subtasks → index subtasks of a task
+    Route::get('tasks/{task}/subtasks', [SubTaskController::class, 'index']);
+
+    // POST /tasks/{task}/subtasks → create subtask
+    Route::post('tasks/{task}/subtasks', [SubTaskController::class, 'store']);
+
+    // GET /tasks/{task}/subtasks/{subtask} → show subtask
+    Route::get('tasks/subtasks/{subtask}', [SubTaskController::class, 'show']);
+
+    // PUT /tasks/{task}/subtasks/{subtask} → update subtask
+    Route::put('tasks/{task}/subtasks/{subtask}', [SubTaskController::class, 'update']);
+    Route::patch('tasks/{task}/subtasks/{subtask}', [SubTaskController::class, 'update']); // optional
+
+    // DELETE /tasks/{task}/subtasks/{subtask} → delete subtask
+    Route::delete('tasks/subtasks/{subtask}', [SubTaskController::class, 'destroy']);
+});
