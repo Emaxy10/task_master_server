@@ -74,9 +74,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('tasks/subtasks/{subtask}', [SubTaskController::class, 'show']);
 
     // PUT /tasks/{task}/subtasks/{subtask} → update subtask
-    Route::put('tasks/{task}/subtasks/{subtask}', [SubTaskController::class, 'update']);
-    Route::patch('tasks/{task}/subtasks/{subtask}', [SubTaskController::class, 'update']); // optional
+    Route::put('/tasks/subtasks/{subtask}', [SubTaskController::class, 'update']);
+    //Route::patch('tasks/subtasks/{subtask}', [SubTaskController::class, 'update']); // optional
 
     // DELETE /tasks/{task}/subtasks/{subtask} → delete subtask
-    Route::delete('tasks/subtasks/{subtask}', [SubTaskController::class, 'destroy']);
+    Route::delete('/tasks/subtasks/{subtask}', [SubTaskController::class, 'destroy']);
 });

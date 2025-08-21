@@ -72,12 +72,8 @@ class SubTaskController extends Controller
     /**
      * Update a subtask.
      */
-    public function update(Request $request, Task $task, SubTask $subTask)
+    public function update(Request $request, SubTask $subtask)
     {
-        if ($subTask->task_id !== $task->id) {
-            return response()->json(['error' => 'SubTask does not belong to this task'], 403);
-        }
-
         $validated = $request->validate([
             'title' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
@@ -85,16 +81,17 @@ class SubTaskController extends Controller
             'end_date' => 'nullable|date',
         ]);
 
-        $subTask->update($validated);
-
-        return response()->json($subTask);
+        $subtask->update($validated);
+ 
+        return response()->json($subtask);
     }
 
     /**
      * Remove a subtask.
      */
-    public function destroy(SubTask $subTask)
+    public function destroy(SubTask $subtask)
     {
-        $subTask->delete();
+        $subtask->delete();
+        return response()->json(['message' => 'Subtask deleted successfully']);
     }
 }
