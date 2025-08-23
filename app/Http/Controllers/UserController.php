@@ -16,6 +16,7 @@ class UserController extends Controller
     public function register(StoreUserRequest $request){
 
         $user = User::create($request->all());
+        $user->assignRole('user');
         return $user;
     }
 
