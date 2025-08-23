@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Models\Task;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -51,4 +52,40 @@ class User extends Authenticatable
     public function tasks(){
         return $this->hasMany(Task::class);
     }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    public function hasRole($roles){
+        if(is_array($roles)){
+            return $this->roles->pluck('name')->intersect($roles)->isNotEmpty();
+        }
+
+        if(is_string($roles)){
+            return $this->roles->contains('name', $roles);
+        }
+        
+        if(is_numeric($roles)){
+            return $this->roles->contains('name', $roles);
+        }
+
+        return false;
+    }
+
+    public function assignRole($role){
+        if(is_string($role)){
+            $role = Role::where('name', $role)->firstOrFail();
+        }
+        elseif(is_numeric($role)){
+            $role = Role::findOrFail($role);
+         }
+      return $this->roles()->syncWithoutDetaching([$role->id]);
+    }
+
+    public function removeRole($role){
+        return $this->roles()->detach($role);
+    }
+
+
 }
