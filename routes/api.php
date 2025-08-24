@@ -34,7 +34,7 @@ Route::get('/tasks/ongoing', [TaskController::class, 'ongoing'])->middleware('au
 
 Route::get('/tasks/{task}', [TaskController::class, 'show'])->middleware('auth:api');
 Route::put('/tasks/{task}', [TaskController::class,'update'])->middleware('auth:api');
-Route::delete('/tasks/{task}', [TaskController::class,'destroy']);
+Route::delete('/tasks/{task}', [TaskController::class,'destroy'])->middleware('auth:api')->middleware('role:admin');;
 Route::get('/user/tasks', [TaskController::class,'user_tasks'])->middleware('auth:api');
 Route::get('/tasks/{task}', [TaskController::class,'show']);
 Route::get('/tasks/search/{search}', [TaskController::class, 'search'])->middleware('auth:api');
@@ -78,5 +78,5 @@ Route::middleware('auth:api')->group(function () {
     //Route::patch('tasks/subtasks/{subtask}', [SubTaskController::class, 'update']); // optional
 
     // DELETE /tasks/{task}/subtasks/{subtask} → delete subtask
-    Route::delete('/tasks/subtasks/{subtask}', [SubTaskController::class, 'destroy']);
+    Route::delete('/tasks/subtasks/{subtask}', [SubTaskController::class, 'destroy'])->middleware('role:admin');
 });
