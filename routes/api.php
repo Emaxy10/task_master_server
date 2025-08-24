@@ -34,7 +34,11 @@ Route::get('/tasks/ongoing', [TaskController::class, 'ongoing'])->middleware('au
 
 Route::get('/tasks/{task}', [TaskController::class, 'show'])->middleware('auth:api');
 Route::put('/tasks/{task}', [TaskController::class,'update'])->middleware('auth:api');
-Route::delete('/tasks/{task}', [TaskController::class,'destroy'])->middleware('auth:api')->middleware('role:admin');;
+Route::delete('/tasks/{task}', [TaskController::class,'destroy'])
+->middleware('auth:api')
+->middleware('role:admin')
+->middleware('perm:delete_task');
+
 Route::get('/user/tasks', [TaskController::class,'user_tasks'])->middleware('auth:api');
 Route::get('/tasks/{task}', [TaskController::class,'show']);
 Route::get('/tasks/search/{search}', [TaskController::class, 'search'])->middleware('auth:api');
@@ -63,7 +67,7 @@ Route::patch('/tasks/{task}/status/undo', [TaskController::class, 'undoTask'])->
 // DELETE /tasks/{task}/subtasks/{subtask} → delete subtask
 
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api', 'role:admin,supervisor', 'perm:delete_subtask'])->group(function () {
     // GET /tasks/{task}/subtasks → index subtasks of a task
     Route::get('tasks/{task}/subtasks', [SubTaskController::class, 'index']);
 
@@ -78,5 +82,5 @@ Route::middleware('auth:api')->group(function () {
     //Route::patch('tasks/subtasks/{subtask}', [SubTaskController::class, 'update']); // optional
 
     // DELETE /tasks/{task}/subtasks/{subtask} → delete subtask
-    Route::delete('/tasks/subtasks/{subtask}', [SubTaskController::class, 'destroy'])->middleware('role:admin');
+    Route::delete('/tasks/subtasks/{subtask}', [SubTaskController::class, 'destroy']);
 });
