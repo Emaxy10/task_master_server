@@ -57,6 +57,12 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_role');
     }
 
+   public function subscription()
+{
+    return $this->hasOne(Subscription::class);
+}
+
+
     public function hasRole($roles){
         if(is_array($roles)){
             return $this->roles->pluck('name')->intersect($roles)->isNotEmpty();
@@ -73,6 +79,8 @@ class User extends Authenticatable
         return false;
     }
 
+    
+
     public function assignRole($role){
         if(is_string($role)){
             $role = Role::where('name', $role)->firstOrFail();
@@ -86,6 +94,21 @@ class User extends Authenticatable
     public function removeRole($role){
         return $this->roles()->detach($role);
     }
+
+    public function hasSubscription($subs)
+    {
+        if (is_array($subs)) {
+            return in_array($this->subscription?->plan, $subs);
+        }
+
+        if (is_string($subs)) {
+            return $this->subscription?->plan === $subs;
+        }
+
+        return false;
+    }
+
+
 
 
 }
