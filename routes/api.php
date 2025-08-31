@@ -24,6 +24,8 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/tasks', [TaskController::class,'store'])->middleware('auth:api');
 Route::get('/tasks', [TaskController::class,'index']);
 
+Route::get('/users', [UserController::class, 'getUser']);
+
 Route::get('/tasks/completed', [TaskController::class, 'get_completed_task'])->middleware('auth:api');
 
 //Route::get('/tasks/overdue', [TaskController::class, 'overdue'])->middleware('auth:api');
@@ -38,6 +40,10 @@ Route::delete('/tasks/{task}', [TaskController::class,'destroy'])
 ->middleware('auth:api')
 ->middleware('role:admin')
 ->middleware('perm:delete_task');
+
+//Assign Task
+Route::post('/tasks/{task}/assign', [TaskController::class, 'assignTask'])->middleware('auth:api');
+
 
 Route::get('/user/tasks', [TaskController::class,'user_tasks'])->middleware('auth:api');
 Route::get('/tasks/{task}', [TaskController::class,'show']);

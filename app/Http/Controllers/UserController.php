@@ -74,4 +74,11 @@ class UserController extends Controller
     }
     }
 
+    public function getUser(){
+        $users = User::all();
+        return response()->json([
+            'users' => $users
+        ]);
+    }
+
 }

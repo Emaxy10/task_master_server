@@ -213,14 +213,14 @@ class TaskController extends Controller
 
     }
 
-    public function assignTask(Request $request){
+    public function assignTask(Request $request, Task $task){
         try{
              $validated = $request->validate([
             'user_id' => ['required', 'exists:users,id'],
-            'task_id' => ['required', 'exists:tasks,id'],
+
             ]);
 
-            $task = Task::findOrFail($validated['task_id']);
+        //    $task = Task::findOrFail($validated['task_id']);
 
             // attach user to task (pivot: task_user)
             // Prevent duplicate assignment
