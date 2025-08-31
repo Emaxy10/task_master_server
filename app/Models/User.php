@@ -53,6 +53,16 @@ class User extends Authenticatable
         return $this->hasMany(Task::class);
     }
 
+    // users can create many tasks
+    public function createdTasks() {
+        return $this->hasMany(Task::class, 'user_id');
+    }
+
+    public function assignedTasks()
+    {
+        return $this->belongsToMany(Task::class, 'task_user');
+    }
+
     public function roles(){
         return $this->belongsToMany(Role::class, 'user_role');
     }

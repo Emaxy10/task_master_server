@@ -27,7 +27,7 @@ Route::get('/tasks', [TaskController::class,'index']);
 Route::get('/tasks/completed', [TaskController::class, 'get_completed_task'])->middleware('auth:api');
 
 //Route::get('/tasks/overdue', [TaskController::class, 'overdue'])->middleware('auth:api');
-Route::get('/tasks/overdue', [TaskController::class, 'overdue'])->middleware('auth:api')->middleware('sub:individual');
+Route::get('/tasks/overdue', [TaskController::class, 'overdue'])->middleware('auth:api');
 
 Route::get('/tasks/ongoing', [TaskController::class, 'ongoing'])->middleware('auth:api');
 

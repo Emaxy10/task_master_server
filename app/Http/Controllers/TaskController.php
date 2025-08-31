@@ -13,6 +13,7 @@ use Illuminate\Queue\RedisQueue;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use Exception;
 
 class TaskController extends Controller
 {
@@ -203,12 +204,39 @@ class TaskController extends Controller
                         ->orWhere('status', 'pending');
                 })
                 ->where(function ($query) {
-                    $query->whereDate('end_date', '>', Carbon::today())
+                    $query->whereDate('end_date', '>=', Carbon::today())
                         ->orWhereNull('end_date');
                 })
                 ->get();
 
             return response()->json($tasks);
+
+    }
+
+    public function assignTask(Request $request){
+        try{
+             $validated = $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
+            'task_id' => ['required', 'exists:tasks,id'],
+            ]);
+
+            $task = Task::findOrFail($validated['task_id']);
+
+            // attach user to task (pivot: task_user)
+            // Prevent duplicate assignment
+            $task->assignees()->syncWithoutDetaching([$validated['user_id']]);
+
+            return response()->json([
+                'message' => 'Task assigned successfully',
+                'task'    => $task->load('assignees') // return with all assignees
+            ]);
+        }catch(Exception $e){
+           return response()->json([
+                "error" => $e->getMessage()
+            ], 500);
+        }
+       
+
 
     }
 
