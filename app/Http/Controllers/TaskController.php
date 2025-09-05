@@ -223,13 +223,23 @@ class TaskController extends Controller
         //    $task = Task::findOrFail($validated['task_id']);
 
             // attach user to task (pivot: task_user)
-            // Prevent duplicate assignment
-            $task->assignees()->syncWithoutDetaching([$validated['user_id']]);
+             // check if this user is already assigned
+            if ($task->assignees()->where('user_id', $validated['user_id'])->exists()) {
+                return response()->json([
+                    'error' => 'This user is already assigned to the task.'
+                ], 422); // 422 Unprocessable Entity
+            }else{
+                $task->assigned_by = Auth::id();
+                $task->save();
 
-            return response()->json([
-                'message' => 'Task assigned successfully',
-                'task'    => $task->load('assignees') // return with all assignees
-            ]);
+                // attach user to task (pivot: task_user)
+                $task->assignees()->attach($validated['user_id']);
+
+                return response()->json([
+                    'message' => 'Task assigned successfully',
+                    'task'    => $task->load('assignees') // return with all assignees
+                ]);
+            }
         }catch(Exception $e){
            return response()->json([
                 "error" => $e->getMessage()
@@ -238,6 +248,20 @@ class TaskController extends Controller
        
 
 
+    }
+
+    public function getAssignedTask(){
+        $user = Auth::id();
+
+        $assignedByTask = Task::where('assigned_by', $user)
+        ->with('assignees') 
+        ->get();
+
+        return response()->json([
+            'assigned_task' => $assignedByTask
+        ]);
+
+        //Do this better, put the assigned_by column on the task_user table
     }
 
 

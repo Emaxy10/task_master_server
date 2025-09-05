@@ -23,7 +23,8 @@ class Task extends Model
         "custom_date",
         "custom_time",
         "weekly_day",
-        "priority"
+        "priority",
+        "assigned_by"
         
     ] ;
 

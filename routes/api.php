@@ -3,6 +3,7 @@
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubTaskController;
+use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route as RoutingRoute;
@@ -33,6 +34,10 @@ Route::get('/tasks/overdue', [TaskController::class, 'overdue'])->middleware('au
 
 Route::get('/tasks/ongoing', [TaskController::class, 'ongoing'])->middleware('auth:api');
 
+//get assigned task
+Route::get('/tasks/assigned', [TaskController::class, 'getAssignedTask'])->middleware('auth:api');
+
+
 
 Route::get('/tasks/{task}', [TaskController::class, 'show'])->middleware('auth:api');
 Route::put('/tasks/{task}', [TaskController::class,'update'])->middleware('auth:api');
@@ -40,6 +45,7 @@ Route::delete('/tasks/{task}', [TaskController::class,'destroy'])
 ->middleware('auth:api')
 ->middleware('role:admin')
 ->middleware('perm:delete_task');
+
 
 //Assign Task
 Route::post('/tasks/{task}/assign', [TaskController::class, 'assignTask'])->middleware('auth:api');
