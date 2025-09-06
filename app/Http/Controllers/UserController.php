@@ -37,6 +37,8 @@ class UserController extends Controller
 
              // Get the authenticated user
         $user = Auth::user();
+        $user_sub = $user->subscription->plan;
+        $user_roles = $user->roles;
      
 
         $http = new Client();
@@ -60,7 +62,8 @@ class UserController extends Controller
 
                 return response()->json([
                     'user' => $user,
-                    
+                    // 'subscription' =>$user_sub,
+                   
                     'access_token' => $tokenData['access_token'],
                     'refresh_token' => $tokenData['refresh_token'],
                     'token_type' => $tokenData['token_type'],
