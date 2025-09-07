@@ -118,6 +118,19 @@ class User extends Authenticatable
         return false;
     }
 
+    // A supervisor has many members
+    public function members()
+    {
+        return $this->hasMany(User::class, 'supervisor_id');
+    }
+
+    // A member belongs to one supervisor
+    public function supervisor()
+    {
+        return $this->belongsTo(User::class, 'supervisor_id');
+    }
+
+
 
 
 

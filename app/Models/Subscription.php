@@ -8,6 +8,11 @@ class Subscription extends Model
 {
     //
 
+    protected $fillable = [
+        "plan",
+        "is_active",
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

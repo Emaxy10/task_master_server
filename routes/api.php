@@ -25,7 +25,7 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/tasks', [TaskController::class,'store'])->middleware('auth:api');
 Route::get('/tasks', [TaskController::class,'index']);
 
-Route::get('/users', [UserController::class, 'getUser']);
+Route::get('/tasks/team/members', [UserController::class, 'getTeamMembers'])->middleware('auth:api');
 
 Route::get('/tasks/completed', [TaskController::class, 'get_completed_task'])->middleware('auth:api');
 
@@ -55,6 +55,16 @@ Route::get('/user/tasks', [TaskController::class,'user_tasks'])->middleware('aut
 Route::get('/tasks/{task}', [TaskController::class,'show']);
 Route::get('/tasks/search/{search}', [TaskController::class, 'search'])->middleware('auth:api');
 //Create middleware to ensure user seeing only his tasks when he search
+
+//get Email
+Route::get('/tasks/user/{search}/email', [UserController::class, 'searchEmail'])->middleware('auth:api');
+//Add member
+Route::patch('/tasks/user/add/{user}/member', [UserController::class, 'addTeamMember'])->middleware('auth:api');
+
+// Remove member
+Route::delete('/tasks/team/members/{id}', [UserController::class, 'removeMember'])->middleware('auth:api');
+
+
 
 
 Route::patch('/tasks/{task}/complete', [TaskController::class, 'completedTask'])->middleware('auth:api');

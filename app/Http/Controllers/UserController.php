@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
+use App\Models\Subscription;
 use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
@@ -78,10 +79,106 @@ class UserController extends Controller
     }
 
     public function getUser(){
-        $users = User::all();
+        $users = User::whereHas('subscription', function ($query) {
+            $query->where('plan', 'team');
+        })->get();
+
         return response()->json([
-            'users' => $users
+            'users' => $users,
         ]);
     }
+
+    public function addTeamMember(User $user){
+
+        $authId = Auth::id();
+
+        // 🚫 Prevent assigning yourself
+        if ($user->id === $authId) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'You cannot assign yourself as your own supervisor.',
+            ], 400);
+        }
+
+            // 🚦 Check if user already has a supervisor
+        if (!is_null($user->supervisor_id)) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'This user already has a supervisor assigned'
+            ], 400);
+        }
+        
+        
+        $user->supervisor_id = $authId;
+
+        // Assign subscription plan "team"
+            if ($user->subscription) {
+                // if subscription already exists, update it
+                $user->subscription->plan = 'team';
+                $user->subscription->is_active = true;
+                $user->subscription->save();
+            } else {
+                // if no subscription exists, create one
+                $user->subscription()->create([
+                    'plan' => 'team',
+                    'is_active' => true
+                ]);
+            }
+
+
+
+        $user->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Supervisor assigned successfully'
+        ]);
+                
+    }
+
+    public function searchEmail($search){
+        $user = User::where('email', 'like', "%$search%")->first();
+
+        return response()->json($user);
+    }
+
+    public function getTeamMembers()
+        {
+            $supervisor = Auth::user();
+
+            // Only fetch members who belong to this supervisor
+            $members = $supervisor->members;
+
+            return response()->json([
+                'status' => 200,
+                'members' => $members
+            ]);
+        }
+
+
+    public function removeMember($id)
+    {
+        $member = User::findOrFail($id);
+
+        // Ensure the member belongs to the current supervisor
+        if ($member->supervisor_id !== Auth::id()) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Unauthorized action'
+            ], 403);
+        }
+
+        // Remove supervisor assignment
+        $member->supervisor_id = null;
+        $member->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Member removed successfully'
+        ]);
+    }
+
+
+    
 
 }
