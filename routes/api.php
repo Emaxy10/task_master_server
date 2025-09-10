@@ -37,6 +37,9 @@ Route::get('/tasks/ongoing', [TaskController::class, 'ongoing'])->middleware('au
 //get assigned task
 Route::get('/tasks/assigned', [TaskController::class, 'getAssignedTask'])->middleware('auth:api');
 
+// Team Member Tasks
+Route::get('/tasks/team/member/tasks', [TaskController::class, 'getTeamMemberAssignedTask'])->middleware('auth:api');
+
 
 
 Route::get('/tasks/{task}', [TaskController::class, 'show'])->middleware('auth:api');
@@ -63,6 +66,10 @@ Route::patch('/tasks/user/add/{user}/member', [UserController::class, 'addTeamMe
 
 // Remove member
 Route::delete('/tasks/team/members/{id}', [UserController::class, 'removeMember'])->middleware('auth:api');
+
+// Member Task
+
+
 
 
 

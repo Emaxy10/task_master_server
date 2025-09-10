@@ -264,6 +264,21 @@ class TaskController extends Controller
         //Do this better, put the assigned_by column on the task_user table
     }
 
+    public function getTeamMemberAssignedTask(){
+
+        $user = Auth::user();
+
+        $assignedTasks = $user->assignedTasks->map->only([
+            'id',
+            'title', 
+            'description',
+            'end_date',
+            'status'
+        ]);
+
+        return response()->json($assignedTasks);
+    }
+
 
 
 }
