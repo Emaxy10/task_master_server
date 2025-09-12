@@ -144,16 +144,29 @@ class UserController extends Controller
 
     public function getTeamMembers()
         {
-            $supervisor = Auth::user();
+             $user = Auth::user();
+          
 
-            // Only fetch members who belong to this supervisor
-            $members = $supervisor->members;
+
+            $members = collect(); //collect empty members
+
+            if($user->roles->contains('name', 'supervisor')){
+                // Only fetch members who belong to this supervisor
+                $members = $user->members;
+            }// If user is a member return all members under their supervisor
+            elseif ($user->roles->contains('name', 'member')) {
+                if ($user->supervisor) {
+                    $members = $user->supervisor->members;
+                } else {
+                    $members = []; // in case the member has no supervisor assigned
+                }
+            }        
 
             return response()->json([
                 'status' => 200,
-                'members' => $members
+                'members' => $members,
             ]);
-        }
+    }
 
 
     public function removeMember($id)
